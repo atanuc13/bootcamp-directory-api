@@ -1,4 +1,6 @@
 const BootCamp = require('../models/bootcamp');
+const ErrorResponse = require('../utils/errorResponse');
+
 
 // @desc        get all bootcamps
 // @routes      /api/v1/bootcamps/
@@ -13,7 +15,7 @@ exports.getBootcamps = async(req, resp, next) => {
             data: bootcamps
         });
     } catch (err) {
-        resp.status(400).send({ sucess: false });
+        next(err);
     }
 };
 
@@ -26,7 +28,7 @@ exports.getBootcamp = async(req, resp, next) => {
         const bootcamp = await BootCamp.findById(req.params.id);
 
         if (!bootcamp) {
-            return resp.status(400).send({ sucess: false });
+            return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
         }
 
         resp.status(200).send({
@@ -34,7 +36,7 @@ exports.getBootcamp = async(req, resp, next) => {
             data: bootcamp
         });
     } catch (err) {
-        resp.status(400).send({ sucess: false });
+        next(err);
     }
 };
 
@@ -51,7 +53,7 @@ exports.createBootcamp = async(req, resp, next) => {
             data: bootcamp
         });
     } catch (err) {
-        resp.status(400).send({ sucess: false });
+        next(err);
     }
 };
 
@@ -67,7 +69,7 @@ exports.updateBootcamp = async(req, resp, next) => {
         });
 
         if (!bootcamp) {
-            return resp.status(400).send({ sucess: false });
+            return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
         }
 
         resp.status(200).send({
@@ -75,7 +77,7 @@ exports.updateBootcamp = async(req, resp, next) => {
             data: bootcamp
         });
     } catch (err) {
-        resp.status(400).send({ sucess: false });
+        next(err);
     }
 };
 
@@ -88,7 +90,7 @@ exports.deleteBootcamp = async(req, resp, next) => {
         const bootcamp = await BootCamp.findByIdAndDelete(req.params.id);
 
         if (!bootcamp) {
-            return resp.status(400).send({ sucess: false });
+            return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
         }
 
         resp.status(200).send({
@@ -96,6 +98,6 @@ exports.deleteBootcamp = async(req, resp, next) => {
             data: bootcamp
         });
     } catch (err) {
-        resp.status(400).send({ sucess: false });
+        next(err);
     }
 };
